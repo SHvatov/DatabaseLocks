@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+    <changeSet id="1" author="shvatov">
+        <createSequence sequenceName="seq_lock_id" startValue="100000"/>
+    </changeSet>
+
+    <changeSet id="2" author="shvatov">
+        <createTable tableName="db_master_lock">
+            <column name="id" type="bigint">
+                <constraints nullable="true" unique="true"/>
+            </column>
+            <column name="process_identifier" type="varchar(256)"/>
+            <column name="status" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <sql>
+            create unique index idx_new_db_master_lock
+            on db_master_lock (process_identifier)
+            where id is null;
+        </sql>
+    </changeSet>
+
+    <changeSet id="3" author="shvatov">
+        <createTable tableName="db_slave_lock">
+            <column name="id" type="bigint"/>
+            <column name="process_identifier" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="id" tableName="db_slave_lock"/>
+    </changeSet>
+
+    <changeSet id="4" author="shvatov">
+        <createTable tableName="db_slave_per_master">
+            <column name="slave_id" type="bigint"/>
+            <column name="master_id" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey columnNames="slave_id,master_id" tableName="db_slave_per_master"/>
+    </changeSet>
+</databaseChangeLog>

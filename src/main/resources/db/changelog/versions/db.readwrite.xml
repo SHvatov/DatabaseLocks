@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+    <changeSet id="1" author="shvatov">
+        <createTable tableName="db_lock">
+            <column name="process_identifier" type="varchar(256)"/>
+        </createTable>
+
+        <addPrimaryKey columnNames="process_identifier" tableName="db_lock"/>
+    </changeSet>
+</databaseChangeLog>
